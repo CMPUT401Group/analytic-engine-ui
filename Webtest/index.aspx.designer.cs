@@ -40,6 +40,15 @@ namespace Webtest {
         protected global::System.Web.UI.WebControls.Literal metric2;
         
         /// <summary>
+        /// function control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButtonList function;
+        
+        /// <summary>
         /// Submit control.
         /// </summary>
         /// <remarks>
