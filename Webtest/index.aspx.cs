@@ -86,11 +86,14 @@ namespace Webtest
             double unixm1 = timestamp1.TotalSeconds;
             double unixm2 = timestamp2.TotalSeconds;
 
-            //function.SelectedIndex
+            //
 
-           
+            string req = "http://162.246.157.107/call" + "?mdate1=" + unixm1.ToString() + "?mdate2=" + unixm2.ToString()+"?m1="+m1+"?m2="+m2+"?func="+ function.SelectedIndex.ToString();
 
-
+            Uri targetUri = new Uri(req);
+            System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(targetUri);
+            // expect json file
+            var response = request.GetResponse() as HttpWebResponse;
 
         }
 
