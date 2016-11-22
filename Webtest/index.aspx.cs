@@ -28,6 +28,7 @@ namespace Webtest
                 text = text.Replace("[", "");
                 text = text.Replace("]", "");
                 text = text.Replace("\"", "");
+                text = text.Replace(" ", "");
                 string[] t = text.Split(',');
                 //Literal myLitCtrl = (Literal)FindControl("litDescription");
                 string results = "";
@@ -88,7 +89,7 @@ namespace Webtest
 
             //
 
-            string req = "http://162.246.157.107/call" + "?mdate1=" + unixm1.ToString() + "?mdate2=" + unixm2.ToString()+"?m1="+m1+"?m2="+m2+"?func="+ function.SelectedIndex.ToString();
+            string req = "http://162.246.157.107:8888/call" + "?mdate1=" + unixm1.ToString() + "?mdate2=" + unixm2.ToString()+"?m1="+m1+"?m2="+m2+"?func="+ function.SelectedIndex.ToString();
 
             Uri targetUri = new Uri(req);
             System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(targetUri);

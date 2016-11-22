@@ -30,7 +30,7 @@
           
         
         <asp:RadioButtonList ID="function" runat="server" >
-            <asp:ListItem Selected="True">convariance</asp:ListItem>
+            <asp:ListItem Selected="True">correlation</asp:ListItem>
             <asp:ListItem >covariance</asp:ListItem>
         </asp:RadioButtonList>
           
