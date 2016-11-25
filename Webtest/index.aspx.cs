@@ -10,6 +10,7 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Xml;
+using System.Linq;
 using System.Web.Script.Serialization;
 
 namespace Webtest
@@ -95,7 +96,15 @@ namespace Webtest
 
             //
 
-            string req = "http://162.246.157.107:8888/call" + "?mdate1=" + unixm1.ToString() + "&mdate2=" + unixm2.ToString()+"&m1="+m1+"&m2="+m2+"&func="+ function.SelectedIndex.ToString();
+            string req = "http://162.246.157.107:8888/call" + "?mdate1=" + unixm1.ToString() + "&mdate2=" + unixm2.ToString() + "&m1=" + m1;
+
+            if(function.SelectedIndex<2)
+            {
+                req += "&m2=" + m2;
+            }
+
+
+            req += "&func="+ function.SelectedIndex.ToString();
 
 
             Uri targetUri = new Uri(req);
@@ -146,6 +155,16 @@ namespace Webtest
 
         }
 
-
+        protected void checkdeviation(object sender, EventArgs e)
+        {
+            if(function.SelectedIndex==2)
+            {
+                M2.Disabled = true;
+            }
+            else
+            {
+                M2.Disabled = false;
+            }
+        }
     }
 }

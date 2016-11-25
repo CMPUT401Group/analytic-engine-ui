@@ -31,6 +31,15 @@ namespace Webtest {
         protected global::System.Web.UI.WebControls.Literal metric1;
         
         /// <summary>
+        /// M2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText M2;
+        
+        /// <summary>
         /// metric2 control.
         /// </summary>
         /// <remarks>

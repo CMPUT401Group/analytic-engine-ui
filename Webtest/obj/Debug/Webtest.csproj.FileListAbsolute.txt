@@ -17,4 +17,3 @@ C:\Users\Sam\Documents\Visual Studio 2015\Projects\Webtest\Webtest\bin\Microsoft
 C:\Users\Sam\Documents\Visual Studio 2015\Projects\Webtest\Webtest\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Users\Sam\Documents\Visual Studio 2015\Projects\Webtest\Webtest\obj\Debug\Webtest.dll
 C:\Users\Sam\Documents\Visual Studio 2015\Projects\Webtest\Webtest\obj\Debug\Webtest.pdb
-C:\Users\Sam\documents\visual studio 2015\Projects\Webtest\Webtest\obj\Debug\Webtest.csprojResolveAssemblyReference.cache

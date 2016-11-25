@@ -39,20 +39,22 @@
 
                         </datalist>
                     </div>
-                    <div  class="input-control text">
+                    <div  class="input-control text" >
                         <label>Metric #2:</label>
-                        <input list="metricnames" id="M2" name="mname2" />
-
+                        <input list="metricnames" id="M2" name="mname2" runat="server"/>
 
                         <datalist id="metricnames">
-                            
-                            <asp:Literal ID="metric2" runat="server"></asp:Literal>
+                             <asp:Literal ID="metric2" runat="server"></asp:Literal>
                             </datalist>
+                            
+                           
+
                     </div>
                     <div>
-                        <asp:RadioButtonList ID="function" runat="server" >
+                        <asp:RadioButtonList ID="function" runat="server" OnSelectedIndexChanged="checkdeviation" Autopostback = "True"  >
                             <asp:ListItem Selected="True">correlation</asp:ListItem>
                             <asp:ListItem>covariance</asp:ListItem>
+                            <asp:ListItem>deviation</asp:ListItem>
                         </asp:RadioButtonList>
                     </div>
 
@@ -63,6 +65,7 @@
                     
                      <div>
                         <asp:Label runat="server" ID="result_display" Visible="False"></asp:Label>
+                         
                      </div>
                     
                 </form>
