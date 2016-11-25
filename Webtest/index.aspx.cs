@@ -73,7 +73,7 @@ namespace Webtest
             else { return; }
             if (!string.IsNullOrEmpty(nvc["mname2"]))
             {
-                m2 = nvc["mname2"].Replace(""," ");
+                m2 = nvc["mname2"].Replace(" ","");
             }
             else { return; }
 
