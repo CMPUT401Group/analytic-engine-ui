@@ -5,14 +5,21 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Script.Serialization;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using System.Xml;
+using System.Web.Script.Serialization;
 
 namespace Webtest
 {
     public partial class index : System.Web.UI.Page
     {
+
+        JavaScriptSerializer js = new JavaScriptSerializer();
+
+
         protected void Page_Load(object sender, EventArgs e)
         {
             //string url = "162.246.157.107/metrics/index.json";
@@ -45,7 +52,7 @@ namespace Webtest
         protected virtual void submit_Click(object sender, EventArgs e)
         {
             NameValueCollection nvc = Request.Form;
-            
+
             string m1, m2;
             string mdate1, mdate2;
             if (!string.IsNullOrEmpty(nvc["metric1"]))
@@ -61,15 +68,14 @@ namespace Webtest
             else { return; }
             if (!string.IsNullOrEmpty(nvc["mname1"]))
             {
-                m1 = nvc["mname1"];
+                m1 = nvc["mname1"].Replace(" ","");
             }
             else { return; }
             if (!string.IsNullOrEmpty(nvc["mname2"]))
             {
-                m2 = nvc["mname2"];
+                m2 = nvc["mname2"].Replace(""," ");
             }
             else { return; }
-            
 
 
 
@@ -89,12 +95,54 @@ namespace Webtest
 
             //
 
-            string req = "http://162.246.157.107:8888/call" + "?mdate1=" + unixm1.ToString() + "?mdate2=" + unixm2.ToString()+"?m1="+m1+"?m2="+m2+"?func="+ function.SelectedIndex.ToString();
+            string req = "http://162.246.157.107:8888/call" + "?mdate1=" + unixm1.ToString() + "&mdate2=" + unixm2.ToString()+"&m1="+m1+"&m2="+m2+"&func="+ function.SelectedIndex.ToString();
+
 
             Uri targetUri = new Uri(req);
             System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(targetUri);
+
             // expect json file
             var response = request.GetResponse() as HttpWebResponse;
+
+            Stream newStream = response.GetResponseStream();
+
+            StreamReader sr = new StreamReader(newStream);
+            var result = sr.ReadToEnd();
+
+            result_display.Text = result;
+
+            result_display.Visible = true;
+          
+
+
+
+
+            //create new dashboard from jsonfile
+            /*Uri dashuri = new Uri("http://162.246.157.107:3000/api/dashboards/db");
+            HttpWebRequest dash = (System.Net.HttpWebRequest)HttpWebRequest.Create(dashuri);
+            dash.Method = "POST";
+            dash.Headers.Add("Authorization", "Bearer eyJrIjoiaTAyWUhrNFRpRVdDZmR2UDdTRnhoamtOSzFEaWlSQjIiLCJuIjoiYWRkIiwiaWQiOjF9");
+            dash.ContentType = "application/json; charset=utf-8";
+            dash.Accept = "application/json; charset=utf-8";
+
+            using (var streamWriter = new StreamWriter(dash.GetRequestStream()))
+            {
+
+               
+                //json = json.Replace("\",", "\","   + "\"" +"\u002B");
+                streamWriter.Write(result);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+
+            var httpResponse = (HttpWebResponse)dash.GetResponse();*/
+
+
+
+            //get snapshot from dashboard
+
+
+            //display on webpage
 
         }
 
