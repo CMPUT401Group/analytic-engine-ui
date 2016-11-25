@@ -4,10 +4,10 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <link href="metroui\css\metro.css" rel="stylesheet" />
-    <link href="metroui\css\metro-icons.css" rel="stylesheet" />
-    <script src="metroui\js\jquery.js"></script>
-    <script src="metroui\js\metro.min.js"></script>
+    <link href="/metroui/css/metro.css" rel="stylesheet" />
+    <link href="/metroui/css/metro-icons.css" rel="stylesheet" />
+    <script src="/metroui/js/jquery.js"></script>
+    <script src="/metroui/js/metro.min.js"></script>
     <title>Analytics Engine - Covariances and Correlation</title>
 </head>
 <body class="bg-orange fg-white">

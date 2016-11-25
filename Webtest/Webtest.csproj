@@ -66,7 +66,27 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="metroui\css\metro-colors.css" />
+    <Content Include="metroui\css\metro-colors.min.css" />
+    <Content Include="metroui\css\metro-icons.css" />
+    <Content Include="metroui\css\metro-icons.min.css" />
+    <Content Include="metroui\css\metro-responsive.css" />
+    <Content Include="metroui\css\metro-responsive.min.css" />
+    <Content Include="metroui\css\metro-rtl.css" />
+    <Content Include="metroui\css\metro-rtl.min.css" />
+    <Content Include="metroui\css\metro-schemes.css" />
+    <Content Include="metroui\css\metro-schemes.min.css" />
+    <Content Include="metroui\css\metro.css" />
+    <Content Include="metroui\css\metro.min.css" />
+    <Content Include="metroui\fonts\metro.svg" />
+    <Content Include="metroui\js\jquery.js" />
+    <Content Include="metroui\js\metro.js" />
+    <Content Include="metroui\js\metro.min.js" />
     <Content Include="packages.config" />
+    <Content Include="metroui\fonts\metro.eot" />
+    <Content Include="metroui\fonts\metro.ttf" />
+    <Content Include="metroui\fonts\metro.woff" />
+    <Content Include="metroui\fonts\selection.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -88,6 +108,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
