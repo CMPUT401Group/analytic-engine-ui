@@ -4,14 +4,14 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.Serialization.Json;
+using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Xml;
-using System.Linq;
-using System.Web.Script.Serialization;
 
 namespace Webtest
 {
@@ -53,6 +53,7 @@ namespace Webtest
         protected virtual void submit_Click(object sender, EventArgs e)
         {
             NameValueCollection nvc = Request.Form;
+            result_display.Text = "";
 
             string mename1, mename2;
             string mdate1, mdate2;
@@ -97,19 +98,49 @@ namespace Webtest
             System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(targetUri);
 
             // expect json file
-            var response = request.GetResponse() as HttpWebResponse;
-
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            
             Stream newStream = response.GetResponseStream();
 
             StreamReader sr = new StreamReader(newStream);
+
             var result = sr.ReadToEnd();
 
-            result_display.Text = result;
+            result =result.Replace("\"","");
+            result =result.Replace(@"\","");
+            if (function.SelectedIndex == 0)
+            {
+
+
+
+                responseobject_correlation u = (responseobject_correlation)js.Deserialize(result, typeof(responseobject_correlation));
+                result_display.Text = u.r1;
+            }
+            else if (function.SelectedIndex == 1)
+            { 
+                responseobject_covariance u = (responseobject_covariance)js.Deserialize(result, typeof(responseobject_covariance));
+                result_display.Text = u.r2;
+            }
+            else if (function.SelectedIndex == 2)
+            {
+                responseobject_deviation u = (responseobject_deviation)js.Deserialize(result, typeof(responseobject_deviation));  
+                foreach(var i in u.r3)
+                {
+                    result_display.Text += i.ToString();
+                }
+                
+            }
+            else
+            {
+                result_display.Text = result;
+            }
+
+                
 
             result_display.Visible = true;
 
-
-
+            
+            
 
             //create new dashboard from jsonfile
             /*Uri dashuri = new Uri("http://162.246.157.107:3000/api/dashboards/db");

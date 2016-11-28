@@ -63,7 +63,7 @@
                         OnClick="submit_Click"
                         runat="server" Height="26px" />
 
-                     <div>
+                     <div class="leader no-margin-bottom margin20">
                         <asp:Label runat="server" ID="result_display" Visible="False"></asp:Label>
                          
                      </div>
