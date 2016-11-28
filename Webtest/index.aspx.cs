@@ -54,29 +54,15 @@ namespace Webtest
         {
             NameValueCollection nvc = Request.Form;
 
-            string m1, m2;
+            string mename1, mename2;
             string mdate1, mdate2;
-            if (!string.IsNullOrEmpty(nvc["metric1"]))
-            {
-                mdate1 = nvc["metric1"];
-            }
-            else { return; }
 
-            if (!string.IsNullOrEmpty(nvc["metric2"]))
-            {
-                mdate2 = nvc["metric2"];
-            }
-            else { return; }
-            if (!string.IsNullOrEmpty(nvc["mname1"]))
-            {
-                m1 = nvc["mname1"].Replace(" ","");
-            }
-            else { return; }
-            if (!string.IsNullOrEmpty(nvc["mname2"]))
-            {
-                m2 = nvc["mname2"].Replace(" ","");
-            }
-            else { return; }
+            mename1 = M1.Value;
+            mename2 = M2.Value;
+
+            mdate1 = metricdate1.Value;
+            mdate2 = metricdate2.Value;
+
 
 
 
@@ -86,25 +72,25 @@ namespace Webtest
             DateTime dt_mdate2 = Convert.ToDateTime(mdate2);
             DateTime unix = new DateTime(1970, 1, 1, 0, 0, 0);
 
-            
-             
 
-            TimeSpan timestamp1 = dt_mdate1-unix;
-            TimeSpan timestamp2 = dt_mdate2-unix;
+
+
+            TimeSpan timestamp1 = dt_mdate1 - unix;
+            TimeSpan timestamp2 = dt_mdate2 - unix;
             double unixm1 = timestamp1.TotalSeconds;
             double unixm2 = timestamp2.TotalSeconds;
 
             //
 
-            string req = "http://162.246.157.107:8888/call" + "?mdate1=" + unixm1.ToString() + "&mdate2=" + unixm2.ToString() + "&m1=" + m1;
+            string req = "http://162.246.157.107:8888/call" + "?mdate1=" + unixm1.ToString() + "&mdate2=" + unixm2.ToString() + "&m1=" + mename1;
 
-            if(function.SelectedIndex<2)
+            if (function.SelectedIndex < 2)
             {
-                req += "&m2=" + m2;
+                req += "&m2=" + mename2;
             }
 
 
-            req += "&func="+ function.SelectedIndex.ToString();
+            req += "&func=" + function.SelectedIndex.ToString();
 
 
             Uri targetUri = new Uri(req);
@@ -121,7 +107,6 @@ namespace Webtest
             result_display.Text = result;
 
             result_display.Visible = true;
-          
 
 
 

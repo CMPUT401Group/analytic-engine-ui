@@ -22,18 +22,18 @@
                  <form id="form1" runat="server">
                     <div class="input-control text">
                         <label>From:</label>
-                        <input type="datetime-local" name="metric1" id="mdate1" />
+                        <input type="datetime-local" name="date1" id="metricdate1" runat="server"/>
                          
                     </div>
                      <div class="input-control text">
                          <label>To:</label>
-                         <input type="datetime-local" name="metric2" id="mdate2" />
+                         <input type="datetime-local" name="date2" id="metricdate2"  runat="server"/>
                      </div>
 
                     <div  class="input-control text">
                        
                         <label>Metric #1:</label>
-                    <input list="metricname" id="M1" name="mname1" />
+                    <input list="metricname" id="M1" name="mname1" runat="server"/>
                         <datalist id="metricname">
                             <asp:Literal ID="metric1" runat="server"></asp:Literal>
 
@@ -62,7 +62,7 @@
                         Text="Submit"
                         OnClick="submit_Click"
                         runat="server" Height="26px" />
-                    
+
                      <div>
                         <asp:Label runat="server" ID="result_display" Visible="False"></asp:Label>
                          
