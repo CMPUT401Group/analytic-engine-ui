@@ -126,7 +126,7 @@ namespace Webtest
                 responseobject_deviation u = (responseobject_deviation)js.Deserialize(result, typeof(responseobject_deviation));  
                 foreach(var i in u.r3)
                 {
-                    result_display.Text += i.ToString();
+                    result_display.Text += i.ToString()+",";
                 }
                 
             }
