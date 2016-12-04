@@ -9,6 +9,7 @@ using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Web.UI;
+using System.Web.UI.DataVisualization.Charting;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Xml;
@@ -20,7 +21,11 @@ namespace Webtest
 
         JavaScriptSerializer js = new JavaScriptSerializer();
 
-
+        /// <summary>
+        /// grabs the latest list of metric names from matt's server for user
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
             //string url = "162.246.157.107/metrics/index.json";
@@ -39,17 +44,22 @@ namespace Webtest
                 text = text.Replace(" ", "");
                 string[] t = text.Split(',');
                 //Literal myLitCtrl = (Literal)FindControl("litDescription");
-                string results = "";
+                StringBuilder result = new StringBuilder();
                 foreach(var i in t)
                 {
-                    results += "<option value =\""+i+"\"></option>";
+                    result.Append("<option value =\"" + i + "\"></option>");
                 }
-                metric1.Text = results;
-                metric2.Text = results;
+                metric1.Text = result.ToString();
+                metric2.Text = metric1.Text;
 
                 
             }
         }
+        /// <summary>
+        /// submits the data user filled in the form displayed, creates a get request to matt's server, reads response, and displays data
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected virtual void submit_Click(object sender, EventArgs e)
         {
             NameValueCollection nvc = Request.Form;
@@ -81,7 +91,7 @@ namespace Webtest
             double unixm1 = timestamp1.TotalSeconds;
             double unixm2 = timestamp2.TotalSeconds;
 
-            //
+            //generate get request 
 
             string req = "http://162.246.157.107:8888/call" + "?mdate1=" + unixm1.ToString() + "&mdate2=" + unixm2.ToString() + "&m1=" + mename1;
 
@@ -89,30 +99,21 @@ namespace Webtest
             {
                 req += "&m2=" + mename2;
             }
+            else
+            {
+                req += "&func=";
+                displaygraph(req);
+               
+
+                return;
+            }
+
+            string result = makerequest(req);
 
 
-            req += "&func=" + function.SelectedIndex.ToString();
 
-
-            Uri targetUri = new Uri(req);
-            System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(targetUri);
-
-            // expect json file
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            
-            Stream newStream = response.GetResponseStream();
-
-            StreamReader sr = new StreamReader(newStream);
-
-            var result = sr.ReadToEnd();
-
-            result =result.Replace("\"","");
-            result =result.Replace(@"\","");
             if (function.SelectedIndex == 0)
             {
-
-
-
                 responseobject_correlation u = (responseobject_correlation)js.Deserialize(result, typeof(responseobject_correlation));
                 result_display.Text = u.r1;
             }
@@ -121,60 +122,24 @@ namespace Webtest
                 responseobject_covariance u = (responseobject_covariance)js.Deserialize(result, typeof(responseobject_covariance));
                 result_display.Text = u.r2;
             }
-            else if (function.SelectedIndex == 2)
-            {
-                responseobject_deviation u = (responseobject_deviation)js.Deserialize(result, typeof(responseobject_deviation));  
-                foreach(var i in u.r3)
-                {
-                    result_display.Text += i.ToString()+",";
-                }
-                
-            }
             else
             {
                 result_display.Text = result;
             }
 
-                
-
             result_display.Visible = true;
 
-            
-            
-
-            //create new dashboard from jsonfile
-            /*Uri dashuri = new Uri("http://162.246.157.107:3000/api/dashboards/db");
-            HttpWebRequest dash = (System.Net.HttpWebRequest)HttpWebRequest.Create(dashuri);
-            dash.Method = "POST";
-            dash.Headers.Add("Authorization", "Bearer eyJrIjoiaTAyWUhrNFRpRVdDZmR2UDdTRnhoamtOSzFEaWlSQjIiLCJuIjoiYWRkIiwiaWQiOjF9");
-            dash.ContentType = "application/json; charset=utf-8";
-            dash.Accept = "application/json; charset=utf-8";
-
-            using (var streamWriter = new StreamWriter(dash.GetRequestStream()))
-            {
-
-               
-                //json = json.Replace("\",", "\","   + "\"" +"\u002B");
-                streamWriter.Write(result);
-                streamWriter.Flush();
-                streamWriter.Close();
-            }
-
-            var httpResponse = (HttpWebResponse)dash.GetResponse();*/
-
-
-
-            //get snapshot from dashboard
-
-
-            //display on webpage
-
         }
-
+        /// <summary>
+        /// disables the second metric name input if user selects deviation radio button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void checkdeviation(object sender, EventArgs e)
         {
             if(function.SelectedIndex==2)
             {
+                
                 M2.Disabled = true;
             }
             else
@@ -182,5 +147,54 @@ namespace Webtest
                 M2.Disabled = false;
             }
         }
+        void displaygraph(string req)
+        {
+            string data = makerequest(req + "3");
+
+            data = data.Replace("target:", "target:\"");
+            data = data.Replace(",datapoints", "\",datapoints");
+            string exclusion = makerequest(req + "2");
+
+            responseobject_datapackage u = (responseobject_datapackage)js.Deserialize(data, typeof(responseobject_datapackage));
+            responseobject_deviation o = (responseobject_deviation)js.Deserialize(exclusion, typeof(responseobject_deviation));
+
+            u.renderRes1[0].datapoints.RemoveAll(x => o.r3.Contains(Convert.ToInt32(x[1])));
+            graphobject graphobj = u.setupgraph();
+            Series datapoints = new Series("default");
+            datapoints.ChartType = System.Web.UI.DataVisualization.Charting.SeriesChartType.Point;
+            ChartArea Point_Area = new ChartArea("PointArea");
+            Axis yaxis = new Axis(Point_Area, AxisName.Y);
+            Axis xaxis = new Axis(Point_Area, AxisName.X);
+           
+            datapoints.Points.DataBindXY(graphobj.x, graphobj.y);
+            datapoints.XValueType = ChartValueType.Time;
+
+            pointschart.Series.Add(datapoints);
+            pointschart.ChartAreas.Add(Point_Area);
+            pointschart.Enabled = true;
+
+
+        }
+        string makerequest(string req)
+        {
+            Uri targetUri = new Uri(req);
+            System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(targetUri);
+
+            // expect json file
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+            Stream newStream = response.GetResponseStream();
+
+            StreamReader sr = new StreamReader(newStream);
+
+            var result = sr.ReadToEnd();
+
+            result = result.Replace("\"", "");
+            result = result.Replace(@"\", "");
+            return result;
+        }
+
+   
+
     }
 }
