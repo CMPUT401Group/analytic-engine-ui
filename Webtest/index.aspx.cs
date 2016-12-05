@@ -35,6 +35,7 @@ namespace Webtest
             string text;
             var response = (HttpWebResponse)request.GetResponse();
 
+            pointschart.Enabled = false;
             using (var sr = new StreamReader(response.GetResponseStream()))
             {
                 text = sr.ReadToEnd();
@@ -75,12 +76,21 @@ namespace Webtest
             mdate2 = metricdate2.Value;
 
 
-
+            if(mename1 == "" || mdate1=="" || mdate2=="")
+            {
+                ErrorTrap("Please fill in data before continuing.");
+                return;
+            }
 
             //convert to unix timestamp
 
             DateTime dt_mdate1 = Convert.ToDateTime(mdate1);
             DateTime dt_mdate2 = Convert.ToDateTime(mdate2);
+            if(dt_mdate1 == dt_mdate2 || dt_mdate2<dt_mdate1)
+            {
+                ErrorTrap("Please make sure from and between are not exactly the same. Or 'To' is earlier than 'From'");
+            }
+
             DateTime unix = new DateTime(1970, 1, 1, 0, 0, 0);
 
 
@@ -115,12 +125,12 @@ namespace Webtest
             if (function.SelectedIndex == 0)
             {
                 responseobject_correlation u = (responseobject_correlation)js.Deserialize(result, typeof(responseobject_correlation));
-                result_display.Text = u.r1;
+                result_display.Text = "Correlation: "+u.r1;
             }
             else if (function.SelectedIndex == 1)
             { 
                 responseobject_covariance u = (responseobject_covariance)js.Deserialize(result, typeof(responseobject_covariance));
-                result_display.Text = u.r2;
+                result_display.Text = "Covariance: "+u.r2;
             }
             else
             {
@@ -158,8 +168,19 @@ namespace Webtest
             responseobject_datapackage u = (responseobject_datapackage)js.Deserialize(data, typeof(responseobject_datapackage));
             responseobject_deviation o = (responseobject_deviation)js.Deserialize(exclusion, typeof(responseobject_deviation));
 
+            graphobject origin = u.setupgraph();
+
             u.renderRes1[0].datapoints.RemoveAll(x => o.r3.Contains(Convert.ToInt32(x[1])));
+
             graphobject graphobj = u.setupgraph();
+
+
+
+
+
+
+
+
             Series datapoints = new Series("default");
             datapoints.ChartType = System.Web.UI.DataVisualization.Charting.SeriesChartType.Point;
             ChartArea Point_Area = new ChartArea("PointArea");
@@ -172,6 +193,23 @@ namespace Webtest
             pointschart.Series.Add(datapoints);
             pointschart.ChartAreas.Add(Point_Area);
             pointschart.Enabled = true;
+
+
+
+
+            Series datapointsorigin = new Series("default");
+            datapointsorigin.ChartType = System.Web.UI.DataVisualization.Charting.SeriesChartType.Point;
+            ChartArea Point_Areaorigin = new ChartArea("PointArea");
+            Axis yaxisorigin = new Axis(Point_Areaorigin, AxisName.Y);
+            Axis xaxisorigin = new Axis(Point_Areaorigin, AxisName.X);
+
+            datapointsorigin.Points.DataBindXY(origin.x, origin.y);
+            datapointsorigin.XValueType = ChartValueType.Time;
+
+            pointorigin.Series.Add(datapointsorigin);
+            pointorigin.ChartAreas.Add(Point_Areaorigin);
+            pointorigin.Enabled = true;
+
 
 
         }
@@ -193,8 +231,13 @@ namespace Webtest
             result = result.Replace(@"\", "");
             return result;
         }
+        public void ErrorTrap(string str)
+        {
+            ScriptManager.RegisterStartupScript(Page, Page.GetType(), "alert" + UniqueID,
+               "alert('" + str + "');", true);
+        }
 
-   
+
 
     }
 }

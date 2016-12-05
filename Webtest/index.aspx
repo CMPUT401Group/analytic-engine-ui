@@ -10,14 +10,14 @@
     <link href="/metroui/css/metro-icons.css" rel="stylesheet" />
     <script src="/metroui/js/jquery.js"></script>
     <script src="/metroui/js/metro.min.js"></script>
-    <title>Analytics Engine - Covariances and Correlation</title>
+    <title>Analytics Engine - Covariances, Correlation, Deviation</title>
 </head>
 <body class="bg-orange fg-white">
     <div class="flex-grid">
 
         <div class="container padding20">
             <div class="row">
-                <h1>Analytics Engine - Covariances and Correlation</h1>
+                <h1>Analytics Engine - Covariances, Correlation, and Deviation</h1>
 
             </div>
             <div class="row">
@@ -75,10 +75,23 @@
 
                 </form>
             </div>
+            <div class="row" >
+                <label> Metric without deviant datapoints</label>
+            </div>
             <div class="row cell-auto-size">
+
                 <asp:Chart ID="pointschart" runat="server" Enabled="false" Width="600px">
                 </asp:Chart>
 
+           
+
+
+            </div>
+            <div class="row">
+                <label> Original Version containing deviant datapoints</label>
+            </div>
+            <div class="row cell-auto-size">
+                     <asp:Chart ID="pointorigin" runat="server" Enabled="false" Width="600px"></asp:Chart>
             </div>
 
 
