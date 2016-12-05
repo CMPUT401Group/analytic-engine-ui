@@ -37,21 +37,20 @@
                         <label>Metric #1:</label>
                         <input list="metricname" id="M1" name="mname1" runat="server" />
                         <datalist id="metricname">
+                                                    <asp:Literal ID="metric1" runat="server"></asp:Literal>
                         </datalist>
-                        <asp:Literal ID="metric1" runat="server"></asp:Literal>
 
-                        <datalist>
-                        </datalist>
+
                     </div>
                     <div class="input-control text">
                         <label>Metric #2:</label>
                         <input list="metricnames" id="M2" name="mname2" runat="server" />
 
                         <datalist id="metricnames">
+                                                    <asp:Literal ID="metric2" runat="server"></asp:Literal>
                         </datalist>
-                        <asp:Literal ID="metric2" runat="server"></asp:Literal>
-                        <datalist>
-                        </datalist>
+
+
 
 
 
